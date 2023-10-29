@@ -25,14 +25,12 @@ int main() {
         cout << "----- Request ------" << endl;
         cout << data << endl;
         cout << "--------------------" << endl;
-
         Request request = parser.parse(data);
         string document = request.target;
         if (document == "/") {
             document += default_document;
         }
 
-        
         Response response;
         response.version = "HTTP/1.1";
         response.status = 200;

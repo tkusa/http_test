@@ -18,6 +18,9 @@ namespace Http
             map<string, string> fields;
             string body;
 
+            string schema;
+            string host;
+
     };
 }
 

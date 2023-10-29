@@ -14,7 +14,9 @@ namespace Http
     class Parser 
         {
             public:
+                Request parseUrl(string url);
                 Request parse(string data);
+                string build(Request request);
                 string build(Response response);
 
         };

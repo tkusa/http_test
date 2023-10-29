@@ -7,9 +7,14 @@ build
 make
 ```
 
-start
+start server
 ```
 sudo ./build/bin/server
+```
+
+client
+```
+./build/bin/client http://127.0.0.1/
 ```
 
 

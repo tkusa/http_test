@@ -8,6 +8,25 @@
 using namespace std;
 using namespace Http;
 
+Request Parser::parseUrl(string url)
+{
+    Request request;
+    string url_buf = url;
+    string scheme_sep = "://";
+    string slash = "/";
+    int pos = url_buf.find(scheme_sep);
+    request.schema = url_buf.substr(0, pos);
+    url_buf = url_buf.substr(pos + scheme_sep.length());
+    int host_pos = url_buf.find(slash);
+    request.host = url_buf.substr(0, host_pos);
+    request.fields["Host"] = url_buf.substr(0, host_pos);
+    request.target = url_buf.substr(host_pos);
+    request.method = "GET";
+
+    return request;
+}
+
+
 Request Parser::parse(string data)
 {
     Request request;
@@ -19,7 +38,6 @@ Request Parser::parse(string data)
     int space_len = space.length();
     int sep_len = header_sep.length();
     vector<string> headers = {};
-
     int pos = request_data.find(crlf);
 
     while (pos != string::npos) {
@@ -49,6 +67,25 @@ Request Parser::parse(string data)
         request.fields[left] = right;
     }
     return request;
+}
+
+string Parser::build(Request request)
+{
+    string result = "";
+    string first = request.method + " " + request.target + " " + request.version + "\r\n";
+    result += first;
+    for (pair<string, string> field : request.fields) {
+        string header = field.first + ": " + field.second + "\r\n";
+        result +=  header;
+    }
+    result += "\r\n";
+    if (request.body != "") {
+        string body = request.body + "\r\n";
+        result += body;
+        result += "\r\n\r\n";
+    }
+    
+    return result;
 }
 
 string Parser::build(Response response)
